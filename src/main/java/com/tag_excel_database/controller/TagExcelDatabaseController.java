@@ -1,5 +1,6 @@
 package com.tag_excel_database.controller;
 
+import com.tag_excel_database.excel.TagExcelParser;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -44,7 +45,6 @@ public class TagExcelDatabaseController
         LocalDateTime date = LocalDateTime.now();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Output Directory");
-        directoryChooser.setInitialDirectory(inputFile);
         File selectedDirectory = directoryChooser.showDialog(applicationStage);
         try(InputStream input = new FileInputStream("src/main/resources/application.properties"))
         {
@@ -61,13 +61,12 @@ public class TagExcelDatabaseController
         {
             e.printStackTrace();
         }
-
-
     }
 
     @FXML
     protected void onSubmitButtonClick()
     {
-
+        TagExcelParser excelParser = new TagExcelParser();
+        excelParser.copyTagWorkbook(inputFile, outputFile);
     }
 }
