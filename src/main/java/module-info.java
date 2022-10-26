@@ -6,4 +6,6 @@ module com.tag_excel_database.tag_excel_database {
 
     opens com.tag_excel_database to javafx.fxml;
     exports com.tag_excel_database;
+    exports com.tag_excel_database.controller;
+    opens com.tag_excel_database.controller to javafx.fxml;
 }
