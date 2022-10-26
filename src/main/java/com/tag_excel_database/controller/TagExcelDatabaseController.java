@@ -6,10 +6,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.security.Timestamp;
-import java.time.LocalDate;
-import java.util.Date;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.Properties;
 
 import static com.tag_excel_database.ApplicationProperties.applicationStage;
 import static com.tag_excel_database.ApplicationProperties.dateTimeFormatter;
@@ -42,17 +41,28 @@ public class TagExcelDatabaseController
     @FXML
     protected void onOutputButtonClick()
     {
-        LocalDate date = LocalDate.now();
+        LocalDateTime date = LocalDateTime.now();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Output Directory");
         directoryChooser.setInitialDirectory(inputFile);
         File selectedDirectory = directoryChooser.showDialog(applicationStage);
-        String outputDirectory = selectedDirectory.getAbsolutePath() + "/General Tags Processed_" + date.format(dateTimeFormatter) + ".xlsx";
-        outputFile = new File(outputDirectory);
-        if (outputFile != null)
+        try(InputStream input = new FileInputStream("src/main/resources/application.properties"))
         {
-            outputTextField.setText(outputFile.getAbsolutePath());
+            Properties properties = new Properties();
+            properties.load(input);
+            String outputDirectory = selectedDirectory.getAbsolutePath() + "/" + properties.getProperty("outputfilename") + date.format(dateTimeFormatter) + ".xlsx";
+            outputFile = new File(outputDirectory);
+            if (outputFile != null)
+            {
+                outputTextField.setText(outputFile.getAbsolutePath());
+            }
         }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+
     }
 
     @FXML
