@@ -41,7 +41,7 @@
    <HBox VBox.vgrow="ALWAYS">
       <children>
          <Pane HBox.hgrow="ALWAYS" />
-         <Button fx:id="submitButton" mnemonicParsing="false" onAction="#onSubmitButtonClick" text="Submit" />
+         <Button fx:id="submitButton" mnemonicParsing="false" onAction="#onSubmitButtonClick" text="Process" />
       </children>
    </HBox>
 </VBox>

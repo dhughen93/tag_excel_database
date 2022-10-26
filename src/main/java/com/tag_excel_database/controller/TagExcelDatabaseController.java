@@ -2,6 +2,7 @@ package com.tag_excel_database.controller;
 
 import com.tag_excel_database.excel.TagExcelParser;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -66,7 +67,18 @@ public class TagExcelDatabaseController
     @FXML
     protected void onSubmitButtonClick()
     {
-        TagExcelParser excelParser = new TagExcelParser();
-        excelParser.copyTagWorkbook(inputFile, outputFile);
+        if (!inputTextField.getText().isEmpty() && !outputTextField.getText().isEmpty())
+        {
+            TagExcelParser excelParser = new TagExcelParser();
+            excelParser.copyTagWorkbook(inputFile, outputFile);
+            excelParser.processTagWorkbook(outputFile);
+        }
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Enter Input and Output");
+            alert.setContentText("Please enter input file and output directory before processing.\nGo 'Noles >---;;;--->");
+            alert.show();
+        }
     }
 }
