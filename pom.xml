@@ -18,12 +18,12 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>17.0.2</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>17.0.2</version>
+            <version>19</version>
         </dependency>
         <dependency>
             <groupId>org.controlsfx</groupId>
@@ -59,6 +59,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+
                 <version>3.10.1</version>
                 <configuration>
                     <source>17</source>
@@ -69,29 +70,10 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
-                <executions>
-                    <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
-                        <id>default-cli</id>
-                        <configuration>
-                            <mainClass>
-                                com.tag_excel_database.tag_excel_database/com.tag_excel_database.TagExcelDatabaseApplication
-                            </mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
-                            <noManPages>true</noManPages>
-                            <stripDebug>true</stripDebug>
-                            <noHeaderFiles>true</noHeaderFiles>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
+                <!-- Default configuration for running with: mvn clean javafx:run -->
                 <configuration>
+                    <jlinkExecutable>C:/Program Files/Java/jdk-17.0.5/bin/jlink.exe</jlinkExecutable>
+                    <executable>C:/Program Files/Java/jdk-17.0.5/bin/javaw.exe</executable>
                     <stripDebug>true</stripDebug>
                     <compress>2</compress>
                     <noHeaderFiles>true</noHeaderFiles>
@@ -99,39 +81,53 @@
                     <launcher>tag_excel_database</launcher>
                     <jlinkImageName>tag_excel_database</jlinkImageName>
                     <jlinkZipName>tag_excel_database</jlinkZipName>
-                    <mainClass>tag_excel_database/com.tag_excel_database.TagExcelDatabaseApplication</mainClass>
+                    <mainClass>com.tag_excel_database.tag_excel_database/com.tag_excel_database.Main1</mainClass>
                 </configuration>
             </plugin>
-            <!--package image as an exe-->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.0.0</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer"/>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.4.2</version>
+                <configuration>
+                    <!-- get all project dependencies -->
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <!-- MainClass in mainfest make a executable jar -->
+                    <archive>
+                        <manifest>
+                            <mainClass>com.tag_excel_database/Main1</mainClass>
+                        </manifest>
+                    </archive>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- bind to the packaging phase -->
                         <phase>package</phase>
                         <goals>
-                            <goal>exec</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <!-- obtain warp-packer.exe from: "https://github.com/dgiagio/warp/releases/download/v0.3.0/windows-x64.warp-packer.exe" -->
-                    <executable>tools\warp-packer.exe</executable>
-                    <arguments>
-                        <argument>--arch</argument>
-                        <argument>windows-x64</argument>
-
-                        <argument>--input_dir</argument>
-                        <argument>target\image</argument>
-
-                        <argument>--exec</argument>
-                        <argument>bin\tag_excel_database.bat</argument>
-
-                        <argument>--output</argument>
-                        <argument>target\tag_excel_database.exe</argument>
-                    </arguments>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -53,18 +53,26 @@ public class TagExcelParser
                 sheet1.getRow(orderedRowOnFirstSheet).getCell(orderedCellonFirstSheet).setCellValue((int)cell.getNumericCellValue());
                 CellStyle orderedCellStyle = sheet1.getRow(orderedRowOnFirstSheet).getCell(orderedCellonFirstSheet).getCellStyle();
                 orderedCellStyle.setAlignment(HorizontalAlignment.CENTER);
-                System.out.println("Value from " + cell.getSheet().getSheetName() + ": " + (int)cell.getNumericCellValue() + " Sheet 1 value: " + sheet1.getRow(orderedRowOnFirstSheet).getCell((int)orderedCellonFirstSheet));
                 orderedRowOnFirstSheet += 1;
             }
-            try (FileOutputStream outputStream = new FileOutputStream(tagFile))
+            try
             {
+                FileOutputStream outputStream = new FileOutputStream(tagFile);
                 tagWorkbook.write(outputStream);
+                outputStream.close();
+            }
+            catch(IOException e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
                 tagWorkbook.close();
             }
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

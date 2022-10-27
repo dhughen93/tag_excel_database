@@ -47,21 +47,13 @@ public class TagExcelDatabaseController
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Output Directory");
         File selectedDirectory = directoryChooser.showDialog(applicationStage);
-        try(InputStream input = new FileInputStream("src/main/resources/application.properties"))
+        String outputDirectory = selectedDirectory.getAbsolutePath() + "/General_Tags_Processed_" + date.format(dateTimeFormatter) + ".xlsx";
+        outputFile = new File(outputDirectory);
+        if (outputFile != null)
         {
-            Properties properties = new Properties();
-            properties.load(input);
-            String outputDirectory = selectedDirectory.getAbsolutePath() + "/" + properties.getProperty("outputfilename") + date.format(dateTimeFormatter) + ".xlsx";
-            outputFile = new File(outputDirectory);
-            if (outputFile != null)
-            {
-                outputTextField.setText(outputFile.getAbsolutePath());
-            }
+            outputTextField.setText(outputFile.getAbsolutePath());
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
+
     }
 
     @FXML
@@ -72,6 +64,9 @@ public class TagExcelDatabaseController
             TagExcelParser excelParser = new TagExcelParser();
             excelParser.copyTagWorkbook(inputFile, outputFile);
             excelParser.processTagWorkbook(outputFile);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Done");
+            alert.setContentText("Workbook has been processed.");
         }
         else
         {
