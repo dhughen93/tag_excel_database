@@ -9,6 +9,6 @@ For executing the app on a computer without Java:
   3. TagExcelDatabase.xml configuration file
 3. Go inside the folder, and double click the executable to run the app.
 4. Before you can process your spreadsheet, select the input spreadsheet (General Tags.xlsx)
-5. Now select and output directory (a file name will be created for you with a timestamp)
+5. Now select an output directory (a file name will be created for you with a timestamp)
 6. Hit the "Process" button.
 7. Done. Enjoy.
