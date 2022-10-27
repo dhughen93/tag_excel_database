@@ -67,6 +67,7 @@ public class TagExcelDatabaseController
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Done");
             alert.setContentText("Workbook has been processed.");
+            alert.show();
         }
         else
         {

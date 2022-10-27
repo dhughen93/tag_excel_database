@@ -6,8 +6,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.*;
 import java.nio.file.Files;
 
-import static org.apache.poi.ss.usermodel.Cell.*;
-
 public class TagExcelParser
 {
     public void copyTagWorkbook(File inputFile, File outputFile)
@@ -33,7 +31,8 @@ public class TagExcelParser
         int orderedCellonEachSheet = 3; // Column D
         try
         {
-            Workbook tagWorkbook = WorkbookFactory.create(new FileInputStream(tagFile));
+            FileInputStream fileInputStream = new FileInputStream(tagFile);
+            Workbook tagWorkbook = new XSSFWorkbook(fileInputStream);
             Sheet sheet1 = tagWorkbook.getSheetAt(0);
             Row row;
             Cell cell;
