@@ -7,14 +7,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.*;
+import java.io.File;
 import java.time.LocalDateTime;
-import java.util.Properties;
 
-import static com.tag_excel_database.ApplicationProperties.applicationStage;
-import static com.tag_excel_database.ApplicationProperties.dateTimeFormatter;
+import static com.tag_excel_database.configuration.ApplicationProperties.applicationStage;
+import static com.tag_excel_database.configuration.ApplicationProperties.dateTimeFormatter;
 
+@RestController
 public class TagExcelDatabaseController
 {
     @FXML
@@ -73,7 +74,7 @@ public class TagExcelDatabaseController
         {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Enter Input and Output");
-            alert.setContentText("Please enter input file and output directory before processing.\nGo 'Noles >---;;;--->");
+            alert.setContentText("Please enter input file and output directory before processing.");
             alert.show();
         }
     }
