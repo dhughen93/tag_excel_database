@@ -1,32 +1,51 @@
 package com.tag_excel_database.controller;
 
+import com.tag_excel_database.ApplicationProperties;
 import com.tag_excel_database.excel.TagExcelParser;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 
 import java.io.File;
+import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
-import static com.tag_excel_database.configuration.ApplicationProperties.applicationStage;
-import static com.tag_excel_database.configuration.ApplicationProperties.dateTimeFormatter;
-
-@RestController
-public class TagExcelDatabaseController
+@Controller
+public class TagExcelDatabaseController implements Initializable
 {
-    @FXML
-    private Label welcomeText;
     @FXML
     private TextField inputTextField;
     @FXML
     private TextField outputTextField;
+    @FXML
+    private ChoiceBox tagChoiceBox;
+
+    @Value("${tag.types}")
+    String tagTypes;
 
     File inputFile;
     File outputFile;
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        List<String> tagList = new ArrayList<>();
+        tagList.add("General Tags");
+        tagList.add("School Tags");
+        tagList.add("Standard Tags");
+        tagList.add("Healthcare Tags");
+        tagList.add("Military Tags");
+        tagChoiceBox.getItems().setAll(tagList);
+        tagChoiceBox.setValue(tagList.get(0));
+    }
 
     @FXML
     protected void onInputButtonClick()
@@ -34,7 +53,7 @@ public class TagExcelDatabaseController
         FileChooser inputFileChooser = new FileChooser();
         inputFileChooser.setTitle("Select Input Excel Spreadsheet");
         inputFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel", "*.xlsx"));
-        inputFile = inputFileChooser.showOpenDialog(applicationStage);
+        inputFile = inputFileChooser.showOpenDialog(ApplicationProperties.getApplicationStage());
         if (inputFile != null)
         {
             inputTextField.setText(inputFile.getAbsolutePath());
@@ -47,12 +66,15 @@ public class TagExcelDatabaseController
         LocalDateTime date = LocalDateTime.now();
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Output Directory");
-        File selectedDirectory = directoryChooser.showDialog(applicationStage);
-        String outputDirectory = selectedDirectory.getAbsolutePath() + "/General_Tags_Processed_" + date.format(dateTimeFormatter) + ".xlsx";
-        outputFile = new File(outputDirectory);
-        if (outputFile != null)
+        File selectedDirectory = directoryChooser.showDialog(ApplicationProperties.getApplicationStage());
+        if (selectedDirectory != null)
         {
-            outputTextField.setText(outputFile.getAbsolutePath());
+            String outputDirectory = selectedDirectory.getAbsolutePath() + "/" + tagChoiceBox.getValue() + date.format(ApplicationProperties.getDateTimeFormatter()) + ".xlsx";
+            outputFile = new File(outputDirectory);
+            if (outputFile != null)
+            {
+                outputTextField.setText(outputFile.getAbsolutePath());
+            }
         }
 
     }

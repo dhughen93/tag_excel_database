@@ -25,10 +25,19 @@ public class TagExcelParser
 
     public void processTagWorkbook(File tagFile)
     {
-        int orderedRowOnFirstSheet = 4; // Row 5
+        // TODO: make these variables better
+        int rowOnFirstSheet = 4; // Row 5
+
         int orderedCellonFirstSheet = 2; // Column C
         int orderedRowOnEachSheet = 1; // Row 2
         int orderedCellonEachSheet = 3; // Column D
+
+        int personalizedCellOnFirstSheet = 3; // Column D
+        int shippedRowOnEachSheet = 1; // Row 2
+        int shippedCellOnEachSheet = 0; // Column J
+
+
+
         try
         {
             FileInputStream fileInputStream = new FileInputStream(tagFile);
@@ -41,18 +50,19 @@ public class TagExcelParser
                 // We need the value of D2 from each sheet placed into column C of sheet 1, starting at row 5 until we're out of sheets
                 row = tagWorkbook.getSheetAt(i).getRow(orderedRowOnEachSheet);
                 cell = row.getCell(orderedCellonEachSheet);
-                if (sheet1.getRow(orderedRowOnFirstSheet) == null)
-                {
-                    sheet1.createRow(orderedRowOnFirstSheet);
-                }
-                if (sheet1.getRow(orderedRowOnFirstSheet).getCell(orderedCellonFirstSheet) == null)
-                {
-                    sheet1.getRow(orderedRowOnFirstSheet).createCell(orderedCellonFirstSheet);
-                }
-                sheet1.getRow(orderedRowOnFirstSheet).getCell(orderedCellonFirstSheet).setCellValue((int)cell.getNumericCellValue());
-                CellStyle orderedCellStyle = sheet1.getRow(orderedRowOnFirstSheet).getCell(orderedCellonFirstSheet).getCellStyle();
+                writeCell(sheet1, row, cell, rowOnFirstSheet, orderedCellonFirstSheet);
+
+                cell = row.getCell(shippedCellOnEachSheet);
+                writeCell(sheet1, row, cell, rowOnFirstSheet, shippedCellOnEachSheet);
+
+
+
+
+
+
+                CellStyle orderedCellStyle = sheet1.getRow(rowOnFirstSheet).getCell(orderedCellonFirstSheet).getCellStyle();
                 orderedCellStyle.setAlignment(HorizontalAlignment.CENTER);
-                orderedRowOnFirstSheet += 1;
+                rowOnFirstSheet += 1;
             }
             try
             {
@@ -73,5 +83,18 @@ public class TagExcelParser
         {
             e.printStackTrace();
         }
+    }
+
+    private void writeCell(Sheet sheet, Row row, Cell cell, int rowIndex, int cellIndex)
+    {
+        if (sheet.getRow(rowIndex) == null)
+        {
+            sheet.createRow(rowIndex);
+        }
+        if (sheet.getRow(rowIndex).getCell(cellIndex) == null)
+        {
+            sheet.getRow(rowIndex).createCell(cellIndex);
+        }
+        sheet.getRow(rowIndex).getCell(cellIndex).setCellValue((int)cell.getNumericCellValue());
     }
 }
