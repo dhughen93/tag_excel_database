@@ -1,6 +1,7 @@
 target/
 tools/
 TagExcelDatabaseApplication/
+External Libraries/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
