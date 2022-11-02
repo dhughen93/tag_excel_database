@@ -1,4 +1,4 @@
-package com.tag_excel_database;
+package com.tag_excel_database.configuration;
 
 import javafx.stage.Stage;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-@PropertySource(name = "appProperties", value = "classpath:application.properties")
+@PropertySource(value = "classpath:application.properties", name = "appProperties")
 public class ApplicationProperties
 {
     private static Stage applicationStage = null;

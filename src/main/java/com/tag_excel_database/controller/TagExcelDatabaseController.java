@@ -1,6 +1,6 @@
 package com.tag_excel_database.controller;
 
-import com.tag_excel_database.ApplicationProperties;
+import com.tag_excel_database.configuration.ApplicationProperties;
 import com.tag_excel_database.excel.TagExcelParser;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.net.URL;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Controller
+@Component
 public class TagExcelDatabaseController implements Initializable
 {
     @FXML
@@ -30,21 +30,15 @@ public class TagExcelDatabaseController implements Initializable
     private ChoiceBox tagChoiceBox;
 
     @Value("${tag.types}")
-    String tagTypes;
+    String[] tagTypes;
 
     File inputFile;
     File outputFile;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        List<String> tagList = new ArrayList<>();
-        tagList.add("General Tags");
-        tagList.add("School Tags");
-        tagList.add("Standard Tags");
-        tagList.add("Healthcare Tags");
-        tagList.add("Military Tags");
-        tagChoiceBox.getItems().setAll(tagList);
-        tagChoiceBox.setValue(tagList.get(0));
+        tagChoiceBox.getItems().setAll(tagTypes);
+        tagChoiceBox.setValue(tagTypes[0]);
     }
 
     @FXML
@@ -76,7 +70,6 @@ public class TagExcelDatabaseController implements Initializable
                 outputTextField.setText(outputFile.getAbsolutePath());
             }
         }
-
     }
 
     @FXML
