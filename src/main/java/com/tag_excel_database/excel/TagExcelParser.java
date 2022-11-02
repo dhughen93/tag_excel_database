@@ -1,6 +1,7 @@
 package com.tag_excel_database.excel;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
@@ -27,16 +28,32 @@ public class TagExcelParser
     {
         // TODO: make these variables better
         int rowOnFirstSheet = 4; // Row 5
+        int rowOnEachSheet = 1; // Row 2
 
-        int orderedCellonFirstSheet = 2; // Column C
-        int orderedRowOnEachSheet = 1; // Row 2
-        int orderedCellonEachSheet = 3; // Column D
+        int orderedCellonFirstSheetPassenger = 2; // Column C
+        int orderedCellonEachSheetPassenger = 3; // Column D
 
-        int personalizedCellOnFirstSheet = 3; // Column D
-        int shippedRowOnEachSheet = 1; // Row 2
-        int shippedCellOnEachSheet = 0; // Column J
+        int personalizedCellOnFirstSheetPassenger = 3; // Column D
+        int personalizedCellOnEachSheetPassenger = 9; // Column J
 
+        int straightRunCellOnFirstSheetPassenger = 4; // Column E
+        int straightRunCellOnEachSheetPassenger = 10; // Column O
 
+        int orderedCellOnFirstSheetMotorcycle = 5; // Column F
+        int orderedCellOnEachSheetMotorcycle = 14; // Column O
+
+        int personalizedCellOnFirstSheetMotorcycle = 6; // Column G
+        int personalizedCellOnEachSheetMotorcycle = 20; // Column U
+
+        int straightRunCellOnFirstSheetMotorcycle = 7; // Column H
+        int straightRunCellOnEachSheetMotorcycle = 21; // Column V
+
+        int passengerOrderedTotal = 0;
+        int passengerPersonalizedTotal = 0;
+        int passengerStraightRunTotal = 0;
+        int motorcycleOrderedTotal = 0;
+        int motorcyclePersonalizedTotal = 0;
+        int motorcycleStraightRunTotal = 0;
 
         try
         {
@@ -47,23 +64,68 @@ public class TagExcelParser
             Cell cell;
             for (int i = 1; i < tagWorkbook.getNumberOfSheets(); i++)
             {
-                // We need the value of D2 from each sheet placed into column C of sheet 1, starting at row 5 until we're out of sheets
-                row = tagWorkbook.getSheetAt(i).getRow(orderedRowOnEachSheet);
-                cell = row.getCell(orderedCellonEachSheet);
-                writeCell(sheet1, row, cell, rowOnFirstSheet, orderedCellonFirstSheet);
+                // Passenger Cars
+                // D2 from each sheet into column C of sheet 1, starting at row 5 until we're out of sheets
+                row = tagWorkbook.getSheetAt(i).getRow(rowOnEachSheet);
+                cell = row.getCell(orderedCellonEachSheetPassenger);
+                passengerOrderedTotal += writeCell(sheet1, cell, rowOnFirstSheet, orderedCellonFirstSheetPassenger);
 
-                cell = row.getCell(shippedCellOnEachSheet);
-                writeCell(sheet1, row, cell, rowOnFirstSheet, shippedCellOnEachSheet);
+                // J2 from each sheet into column D of sheet 1, starting at row 5 until we're out of sheets
+                row = tagWorkbook.getSheetAt(i).getRow(rowOnEachSheet);
+                cell = row.getCell(personalizedCellOnEachSheetPassenger);
+                passengerPersonalizedTotal += writeCell(sheet1, cell, rowOnFirstSheet, personalizedCellOnFirstSheetPassenger);
+
+                // K2 from each sheet into column E of sheet 1, starting at row 5 until we're out of sheets
+                row = tagWorkbook.getSheetAt(i).getRow(rowOnEachSheet);
+                cell = row.getCell(straightRunCellOnEachSheetPassenger);
+                passengerStraightRunTotal += writeCell(sheet1, cell, rowOnFirstSheet, straightRunCellOnFirstSheetPassenger);
+
+                // Motorcycles
+                // O2 from each sheet into column F of sheet 1, starting at row 5 until we're out of sheets
+                row = tagWorkbook.getSheetAt(i).getRow(rowOnEachSheet);
+                cell = row.getCell(orderedCellOnEachSheetMotorcycle);
+                motorcycleOrderedTotal += writeCell(sheet1, cell, rowOnFirstSheet, orderedCellOnFirstSheetMotorcycle);
+
+                // U2 from each sheet into column G of sheet 1, starting at row 5 until we're out of sheets
+                row = tagWorkbook.getSheetAt(i).getRow(rowOnEachSheet);
+                cell = row.getCell(personalizedCellOnEachSheetMotorcycle);
+                motorcyclePersonalizedTotal += writeCell(sheet1, cell, rowOnFirstSheet, personalizedCellOnFirstSheetMotorcycle);
 
 
+                // V2 from each sheet into column H of sheet 1, starting at row 5 until we're out of sheets
+                row = tagWorkbook.getSheetAt(i).getRow(rowOnEachSheet);
+                cell = row.getCell(straightRunCellOnEachSheetMotorcycle);
+                motorcycleStraightRunTotal += writeCell(sheet1, cell, rowOnFirstSheet, straightRunCellOnFirstSheetMotorcycle);
 
+                // Set cell styles on first sheet
+                CellStyle cellStyle = sheet1.getRow(rowOnFirstSheet).getCell(orderedCellonFirstSheetPassenger).getCellStyle();
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                cellStyle = sheet1.getRow(rowOnFirstSheet).getCell(personalizedCellOnFirstSheetPassenger).getCellStyle();
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                cellStyle = sheet1.getRow(rowOnFirstSheet).getCell(straightRunCellOnFirstSheetPassenger).getCellStyle();
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                cellStyle = sheet1.getRow(rowOnFirstSheet).getCell(orderedCellOnFirstSheetMotorcycle).getCellStyle();
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                cellStyle = sheet1.getRow(rowOnFirstSheet).getCell(personalizedCellOnFirstSheetPassenger).getCellStyle();
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
+                cellStyle = sheet1.getRow(rowOnFirstSheet).getCell(straightRunCellOnFirstSheetMotorcycle).getCellStyle();
+                cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
-
-
-                CellStyle orderedCellStyle = sheet1.getRow(rowOnFirstSheet).getCell(orderedCellonFirstSheet).getCellStyle();
-                orderedCellStyle.setAlignment(HorizontalAlignment.CENTER);
                 rowOnFirstSheet += 1;
             }
+
+            if (sheet1.getRow(rowOnFirstSheet) == null)
+            {
+                sheet1.createRow(rowOnFirstSheet);
+            }
+            sheet1.getRow(rowOnFirstSheet).createCell(orderedCellonFirstSheetPassenger - 1).setCellValue("Totals");
+            sheet1.getRow(rowOnFirstSheet).createCell(orderedCellonFirstSheetPassenger).setCellValue(passengerOrderedTotal);
+            sheet1.getRow(rowOnFirstSheet).createCell(personalizedCellOnFirstSheetPassenger).setCellValue(passengerPersonalizedTotal);
+            sheet1.getRow(rowOnFirstSheet).createCell(straightRunCellOnFirstSheetPassenger).setCellValue(passengerStraightRunTotal);
+            sheet1.getRow(rowOnFirstSheet).createCell(orderedCellOnFirstSheetMotorcycle).setCellValue(motorcycleOrderedTotal);
+            sheet1.getRow(rowOnFirstSheet).createCell(personalizedCellOnFirstSheetMotorcycle).setCellValue(motorcyclePersonalizedTotal);
+            sheet1.getRow(rowOnFirstSheet).createCell(straightRunCellOnFirstSheetMotorcycle).setCellValue(motorcycleStraightRunTotal);
+
             try
             {
                 FileOutputStream outputStream = new FileOutputStream(tagFile);
@@ -85,7 +147,7 @@ public class TagExcelParser
         }
     }
 
-    private void writeCell(Sheet sheet, Row row, Cell cell, int rowIndex, int cellIndex)
+    private int writeCell(Sheet sheet, Cell cell, int rowIndex, int cellIndex)
     {
         if (sheet.getRow(rowIndex) == null)
         {
@@ -96,5 +158,6 @@ public class TagExcelParser
             sheet.getRow(rowIndex).createCell(cellIndex);
         }
         sheet.getRow(rowIndex).getCell(cellIndex).setCellValue((int)cell.getNumericCellValue());
+        return (int)cell.getNumericCellValue();
     }
 }
