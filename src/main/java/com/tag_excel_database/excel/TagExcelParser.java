@@ -1,14 +1,60 @@
 package com.tag_excel_database.excel;
 
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 
+@Component
 public class TagExcelParser
 {
+    @Value("${rowonfirstsheet}")
+    private Integer rowOnFirstSheet;
+    @Value("${rowoneachsheet}")
+    private Integer rowOnEachSheet;
+
+    @Value("${orderedCellonFirstSheetPassenger}")
+    private Integer orderedCellonFirstSheetPassenger;
+
+    @Value("${orderedCellonEachSheetPassenger}")
+    private Integer orderedCellonEachSheetPassenger;
+
+    @Value("${personalizedCellOnFirstSheetPassenger}")
+    private Integer personalizedCellOnFirstSheetPassenger;
+
+    @Value("${personalizedCellOnEachSheetPassenger}")
+    private Integer personalizedCellOnEachSheetPassenger;
+
+    @Value("${straightRunCellOnFirstSheetPassenger}")
+    private Integer straightRunCellOnFirstSheetPassenger;
+
+    @Value("${straightRunCellOnEachSheetPassenger}")
+    private Integer straightRunCellOnEachSheetPassenger;
+
+    @Value("${orderedCellOnFirstSheetMotorcycle}")
+    private Integer orderedCellOnFirstSheetMotorcycle;
+
+    @Value("${orderedCellOnEachSheetMotorcycle}")
+    private Integer orderedCellOnEachSheetMotorcycle;
+
+    @Value("${personalizedCellOnFirstSheetMotorcycle}")
+    private Integer personalizedCellOnFirstSheetMotorcycle;
+
+    @Value("${personalizedCellOnEachSheetMotorcycle}")
+    private Integer personalizedCellOnEachSheetMotorcycle;
+
+    @Value("${straightRunCellOnFirstSheetMotorcycle}")
+    private Integer straightRunCellOnFirstSheetMotorcycle;
+
+    @Value("${straightRunCellOnEachSheetMotorcycle}")
+    private Integer straightRunCellOnEachSheetMotorcycle;
+
     public void copyTagWorkbook(File inputFile, File outputFile)
     {
         FileOutputStream outputStream = null;
@@ -26,28 +72,6 @@ public class TagExcelParser
 
     public void processTagWorkbook(File tagFile)
     {
-        // TODO: make these variables better
-        int rowOnFirstSheet = 4; // Row 5
-        int rowOnEachSheet = 1; // Row 2
-
-        int orderedCellonFirstSheetPassenger = 2; // Column C
-        int orderedCellonEachSheetPassenger = 3; // Column D
-
-        int personalizedCellOnFirstSheetPassenger = 3; // Column D
-        int personalizedCellOnEachSheetPassenger = 9; // Column J
-
-        int straightRunCellOnFirstSheetPassenger = 4; // Column E
-        int straightRunCellOnEachSheetPassenger = 10; // Column O
-
-        int orderedCellOnFirstSheetMotorcycle = 5; // Column F
-        int orderedCellOnEachSheetMotorcycle = 14; // Column O
-
-        int personalizedCellOnFirstSheetMotorcycle = 6; // Column G
-        int personalizedCellOnEachSheetMotorcycle = 20; // Column U
-
-        int straightRunCellOnFirstSheetMotorcycle = 7; // Column H
-        int straightRunCellOnEachSheetMotorcycle = 21; // Column V
-
         int passengerOrderedTotal = 0;
         int passengerPersonalizedTotal = 0;
         int passengerStraightRunTotal = 0;

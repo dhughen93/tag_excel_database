@@ -9,7 +9,9 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -31,6 +33,13 @@ public class TagExcelDatabaseController implements Initializable
 
     @Value("${tag.types}")
     String[] tagTypes;
+
+    private TagExcelParser tagExcelParser;
+
+    public TagExcelDatabaseController(TagExcelParser tagExcelParser)
+    {
+        this.tagExcelParser = tagExcelParser;
+    }
 
     File inputFile;
     File outputFile;
@@ -77,9 +86,8 @@ public class TagExcelDatabaseController implements Initializable
     {
         if (!inputTextField.getText().isEmpty() && !outputTextField.getText().isEmpty())
         {
-            TagExcelParser excelParser = new TagExcelParser();
-            excelParser.copyTagWorkbook(inputFile, outputFile);
-            excelParser.processTagWorkbook(outputFile);
+            tagExcelParser.copyTagWorkbook(inputFile, outputFile);
+            tagExcelParser.processTagWorkbook(outputFile);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Done");
             alert.setContentText("Workbook has been processed.");
